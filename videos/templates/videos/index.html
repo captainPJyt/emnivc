@@ -1,0 +1,32 @@
+{% extends 'videos/base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-3 col-sm-12 mt-5 mb-3">
+			<form method="get">
+				<label for="sort-by">Sort by:</label>
+				<select name="sort-by" id="sort-by" onchange="this.form.submit()">
+					<option value="date-desc"{% if sort_by == 'date-desc' %} selected{% endif %}>Newest First</option>
+					<option value="date-asc"{% if sort_by == 'date-asc' %} selected{% endif %}>Oldest First</option>
+					<option value="views-desc"{% if sort_by == 'views-desc' %} selected{% endif %}>Most Popular</option>
+					<option value="likes-desc"{% if sort_by == 'likes-desc' %} selected{% endif %}>Most Liked</option>
+				</select>
+			</form>
+		</div>
+		{% for object in object_list %}
+		<div class="card col-md-3 col-sm-12 mr-md-2 mt-5 p-3 border-0">
+			<a href="{% url 'video-detail' object.pk %}"><img src="/media/{{ object.thumbnail }}" width="256" height="144"></a>
+			<div class="card-body">
+				<a class="link-text" href="{% url 'video-detail' object.pk %}"><h5 class="text-center">{{ object.title }}</h5></a>
+				<p class="text-muted text-center">{{ object.uploader }}</p>
+				<p class="text-muted text-center">{{ object.uploader_profile }}</p>
+				<p class="text-muted text-center">views: {{ object.views.count }}</p>
+				<p class="text-muted text-center">{{ object.date_posted | date:"d M, Y" }}</p>
+				<p class="text-muted text-center">{{ object.likes.all.count }} likes, {{ object.dislikes.all.count }} dislikes</p>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock content %}
